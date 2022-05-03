@@ -1,11 +1,5 @@
-// Copyright 2021 Your Name <your_email>
-
-#include <stdexcept>
-
+// Copyright 2022 Petrova Kseniya <ksyushki5@yandex.ru>
 #include <gtest/gtest.h>
-
-#include <example.hpp>
-
 TEST(Example, EmptyTest) {
-    EXPECT_THROW(example(), std::runtime_error);
+  EXPECT_TRUE(true);
 }
