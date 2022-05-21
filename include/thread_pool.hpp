@@ -1,4 +1,4 @@
-// Copyright 2022 Petrova Kseniya <ksyushki5@yandex.ru>
+// Copyright 2022 Petrova Kseniya <petrovaKI>
 
 #ifndef INCLUDE_THREAD_POOL_HPP_
 #define INCLUDE_THREAD_POOL_HPP_
@@ -9,7 +9,11 @@
 // Пул потоков в основном используется
 // для сокращения числа потоков приложения
 // и обеспечения управления рабочими потоками
+//Пул потоков принимает задачи из очереди
 
+//Thread Pool имеет очередь задач, из которой
+//каждый поток достаёт новую задачу при условии,
+//что очередь не пуста и поток свободен
 #include <vector>
 #include <queue>
 #include <memory>

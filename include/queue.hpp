@@ -1,4 +1,4 @@
-// Copyright 2022 Petrova Kseniya <ksyushki5@yandex.ru>
+// Copyright 2022 Petrova Kseniya <petrovaKI>
 
 #ifndef INCLUDE_QUEUE_HPP_
 #define INCLUDE_QUEUE_HPP_
@@ -7,7 +7,8 @@
 #include <mutex>
 #include <iostream>
 #include <string>
-
+//класс, выполняющий все методы класса std::queue
+//Реализован для упрощения работы (не требуется следить за мьютексами)
 class Queue{
  public:
   //Добавляет элемент в конец queue.
@@ -36,7 +37,5 @@ class Queue{
   std::queue<std::string> queue_;
 };
 
-Queue queues_;
-Queue queues_pict;
 
 #endif  // INCLUDE_QUEUE_HPP_

@@ -53,13 +53,11 @@ find_package(OpenSSL REQUIRED)
 
 add_library(${PROJECT_NAME} STATIC
   # enum your files and delete this comment
-  ${CMAKE_CURRENT_SOURCE_DIR}/sources/example.cpp
-        include/parametrs.hpp
         include/consumer.hpp
         include/producer.hpp
         include/queue.hpp
         include/root_certificates.hpp
-        include/thread_pool.hpp)
+        include/thread_pool.hpp sources/consumer.cpp sources/producer.cpp sources/crawler.cpp include/crawler.hpp)
 
 add_executable(demo
   ${CMAKE_CURRENT_SOURCE_DIR}/demo/main.cpp

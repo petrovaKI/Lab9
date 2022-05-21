@@ -1,23 +1,33 @@
+// Copyright 2022 Petrova Kseniya <petrovaKI>
+
 #include "producer.hpp"
-#include <boost/asio/ip/tcp.hpp>
-#include <boost/program_options.hpp>
-#include <iostream>
-#include <string>
-#include <queue>
+#include "consumer.hpp"
+#include "crawler.hpp"
+//Суть шаблона Producer-Consumer заключается в том,
+// что каждый поставщик и потребитель работает в отдельном потоке.
+// Поставщики помещают задачи в очередь,
+// а не занятые потребители вытаскивают их и выполняют
 
 using boost::asio::ip::tcp;
 using namespace boost::asio::ssl;
 using namespace boost::beast::http;
-namespace po = boost::program_options;
 using namespace std;
 
-void parse_cmdl(int argc,char* argv[]){
-  //Мы начинаем с объявления всех разрешенных опций с помощью класса
-  // options_description. add_options Метод этого класса возвращает
-  // специальный прокси-объект, который определяет operator().
+struct Options {
+  std::string url;
+  std::string output;
+  unsigned depth;
+  unsigned network_threads;
+  unsigned parser_threads;
+};
+Options opt;
+
+void parse_cmdl(int argc,char *argv[]){
+  //options_description - класс, объявляющий разрешённые опции
+  // add_options - метод этого класса, который возвращает
+  // специальный прокси-объект, определяющий operator().
   // Вызовы этого оператора фактически объявляют параметры.
   // Параметрами являются имя опции, информация о значении и описание опции.
-  // В этом примере первый параметр не имеет значения, а второй имеет значение типа int.
 
   po::options_description desc{"Options"};
   desc.add_options()
@@ -28,8 +38,8 @@ void parse_cmdl(int argc,char* argv[]){
                       ("parser_threads",po::value<unsigned>());
 
   //Класс variables_map можно использовать так же, как std::map,
-  // за исключением того, что значения, хранящиеся там,
-  // должны быть извлечены с помощью метода as.
+  //за исключением того, что значения, хранящиеся там,
+  //должны быть извлечены с помощью метода as.
   po::variables_map vm;
   //Затем вызовы для store, parse_command_line заставляют vm содержать
   // все параметры, найденные в командной строке.
@@ -38,30 +48,30 @@ void parse_cmdl(int argc,char* argv[]){
 
 
   if(vm.count("url"))
-    p.url = vm["url"].as<std::string>();
+    opt.url = vm["url"].as<std::string>();
   if(vm.count("output"))
-    p.output = vm["output"].as<std::string>();
+    opt.output = vm["output"].as<std::string>();
   if(vm.count("depth"))
-    p.depth = vm["depth"].as<unsigned>();
+    opt.depth = vm["depth"].as<unsigned>();
   if(vm.count("network_threads"))
-    p.network_threads = vm["network_threads"].as<unsigned>();
+    opt.network_threads = vm["network_threads"].as<unsigned>();
   if(vm.count("parser_threads"))
-    p.parser_threads = vm["parser_threads"].as<unsigned>();
-  std::cout << p.url << std::endl;
+    opt.parser_threads = vm["parser_threads"].as<unsigned>();
+  std::cout << opt.url << std::endl;
 }
 
 int main(int argc, char* argv[]){
-  //./demo
-  // --url https://yandex.ru/images/
-  // --output /home/kseniya/lab-09-producer-consumer/Log.txt
-  // --depth 1 --network_threads 1 --parser_threads 2
-  std::queue<std::string> q;
   //Парсим командную строку
   parse_cmdl(argc,argv);
 
-  Producer pr(p.network_threads);
-  Consumer k(p.parser_threads);
+  Producer p(opt.network_threads);
+  Consumer k(opt.parser_threads);
 
-  pr.producing(p.url,p.depth,k);
+  crawler(opt.url,opt.depth,k, p, opt.output, p.parser_queue_);
   return 0;
 }
+//./demo
+// --url https://yandex.ru/images/
+// --output /home/kseniya/lab-09-producer-consumer/urls.txt
+// --depth 1 --network_threads 1 --parser_threads 2
+//std::queue<std::string> q;
