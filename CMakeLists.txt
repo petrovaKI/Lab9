@@ -42,9 +42,6 @@ find_package(Threads)
 hunter_add_package(GTest)
 find_package(GTest CONFIG REQUIRED)
 
-hunter_add_package(nlohmann_json)
-find_package(nlohmann_json CONFIG REQUIRED)
-
 hunter_add_package(gumbo)
 find_package(gumbo CONFIG REQUIRED)
 
@@ -52,12 +49,15 @@ hunter_add_package(OpenSSL)
 find_package(OpenSSL REQUIRED)
 
 add_library(${PROJECT_NAME} STATIC
-  # enum your files and delete this comment
         include/consumer.hpp
         include/producer.hpp
         include/queue.hpp
         include/root_certificates.hpp
-        include/thread_pool.hpp sources/consumer.cpp sources/producer.cpp sources/crawler.cpp include/crawler.hpp)
+        include/thread_pool.hpp
+        sources/consumer.cpp
+        sources/producer.cpp
+        sources/crawler.cpp
+        include/crawler.hpp)
 
 add_executable(demo
   ${CMAKE_CURRENT_SOURCE_DIR}/demo/main.cpp
@@ -75,7 +75,6 @@ target_link_libraries(${PROJECT_NAME}
         Boost::system
         Boost::program_options
         Beast::Beast
-        nlohmann_json::nlohmann_json
         gumbo::gumbo
         OpenSSL::SSL OpenSSL::Crypto
         )
