@@ -74,4 +74,3 @@ int main(int argc, char* argv[]){
 // --url https://yandex.ru/images/
 // --output /home/kseniya/lab-09-producer-consumer/urls.txt
 // --depth 1 --network_threads 1 --parser_threads 2
-//std::queue<std::string> q;
