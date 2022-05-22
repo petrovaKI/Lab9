@@ -35,7 +35,7 @@ namespace http = boost::beast::http;
 class Producer{
  public:
   //В конструкторе задаём количество потоков для пула потоков
-  explicit Producer(unsigned poolsCount):pools(poolsCount){}
+  explicit Producer(unsigned poolsCount):download_pools_(poolsCount){}
   std::string download_url(std::string host, std::string target);
   //парсим хост url-адреса
   std::string parse_url_to_host(std::string url);
@@ -51,7 +51,7 @@ class Producer{
   // правильно синхронизируя этот доступ, если он находится в разных потоках.
   std::vector<std::future<std::string>> urls;
   //Пул потоков
-  ThreadPool pools;
+  ThreadPool download_pools_;
   Queue parser_queue_;
 };
 #endif  // INCLUDE_PRODUCER_HPP_

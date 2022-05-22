@@ -15,15 +15,15 @@
 
 class Consumer{
  public:
-  explicit Consumer(unsigned poolsCount):pools_pars(poolsCount){}
+  explicit Consumer(unsigned poolsCount):pars_pools_(poolsCount){}
   void parsing(std::string &outp, Queue &parser_queue);
   void writing(std::string &outp);
   void search_for_img_links(GumboNode* node);
  private:
   //пул забирает задачи из очереди ссылок на парсинг
-  ThreadPool pools_pars;
+  ThreadPool pars_pools_;
   //пул забирает задачи из очереди картинок на запись (один поток)
-  ThreadPool pools_outp{1};
+  ThreadPool outp_pools_{1};
   Queue writer_queue_;
 };
 #endif // INCLUDE_CONSUMER_HPP_

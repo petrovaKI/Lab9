@@ -54,10 +54,10 @@ void Consumer::parsing(std::string &outp, Queue &parser_queue) {
         continue;
     }
     //помещаем в пул все картинки
-    pools_pars.enqueue(&Consumer::search_for_img_links, this,
+    pars_pools_.enqueue(&Consumer::search_for_img_links, this,
                        gumbo_parse(parser_queue.front().c_str())->root);
     //снимаем задачу
     parser_queue.pop();
   }
-  pools_outp.enqueue(&Consumer::writing, this, outp);
+  outp_pools_.enqueue(&Consumer::writing, this, outp);
 }

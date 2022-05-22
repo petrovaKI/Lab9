@@ -108,7 +108,7 @@ void Producer::search_for_links(GumboNode* node){
     std::string curr_str = href->value;
     if (curr_str.find("https:") == 0) {
       //заполняем вектор ссылками----------------------------------
-      urls.push_back(pools.enqueue(&Producer::download_url,
+      urls.push_back(download_pools_.enqueue(&Producer::download_url,
                                    this, parse_url_to_host(curr_str),
                                    parse_url_to_target(curr_str)));
       //----------------------------------------------------------
